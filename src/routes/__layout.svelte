@@ -1,0 +1,11 @@
+<script>
+	import '../app.css';
+</script>
+
+<div class="bg-black h-screen overflow-y-hidden font-mont">
+	<slot />
+</div>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,700&display=swap');
+</style>
