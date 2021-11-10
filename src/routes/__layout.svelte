@@ -2,7 +2,7 @@
 	import '../app.css';
 </script>
 
-<div class="bg-black h-screen overflow-y-hidden font-mont">
+<div class="bg-black h-screen overflow-hidden font-mont">
 	<slot />
 </div>
 

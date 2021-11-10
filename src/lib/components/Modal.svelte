@@ -70,7 +70,6 @@
 	};
 </script>
 
-<div class="text-white">{JSON.stringify(shipInfo)}</div>
 <div class="p-0.5 m-5 mb-0 rounded-lg bg-gradient-to-br from-green to-yellow">
 	<div class="text-white pb-5 p-5 bg-black rounded-lg">
 		<div class="flex w-full justify-end">

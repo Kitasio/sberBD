@@ -1,7 +1,12 @@
-import node from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-static';
 
 export default {
 	kit: {
-		adapter: node()
+		adapter: adapter({
+			// default options are shown
+			pages: 'build',
+			assets: 'build',
+			fallback: null
+		})
 	}
 };
