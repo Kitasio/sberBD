@@ -1,8 +1,13 @@
 <script>
 	import '../app.css';
+	import { openModal } from '$lib/functions/utils';
 </script>
 
-<div class="bg-black h-screen overflow-hidden font-mont">
+<div
+	class={$openModal
+		? 'bg-black min-h-screen md:h-screen md:overflow-hidden font-mont'
+		: 'bg-black h-screen overflow-hidden font-mont'}
+>
 	<slot />
 </div>
 

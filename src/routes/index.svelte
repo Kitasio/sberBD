@@ -50,23 +50,22 @@
 		});
 		ship = ships[count];
 	};
-
+	function getRndInteger(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
 	const sendShip = async () => {
 		await tick();
 		const tl = gsap.timeline({ onComplete: next });
-		const duration = 12;
+		const duration = 8;
+		const randomNum = getRndInteger(20, 60);
 		if (browser && window.innerWidth < 735) {
-			tl.fromTo(
-				'.ship',
-				{ duration, yPercent: 100 },
-				{ duration, yPercent: -30 }
-			);
+			tl.set('.ship', { xPercent: 5, yPercent: 95, opacity: 0.7 });
+			tl.to('.ship', { duration, yPercent: -33, ease: 'none', opacity: 1 });
+			tl.set('.ship', { opacity: 0 });
 		} else {
-			tl.fromTo(
-				'.ship',
-				{ duration, yPercent: 100, xPercent: 50 },
-				{ duration, yPercent: -30, xPercent: 50 }
-			);
+			tl.set('.ship', { xPercent: randomNum, yPercent: 95, opacity: 0.7 });
+			tl.to('.ship', { duration, yPercent: -33, ease: 'none', opacity: 1 });
+			tl.set('.ship', { opacity: 0 });
 		}
 	};
 
@@ -100,14 +99,15 @@
 	};
 </script>
 
-<div class="text-white">
-	<div>updatedShipsCount {updatedShipsCount}</div>
+<div class="text-white overflow-hidden">
+	<!-- <div>updatedShipsCount {updatedShipsCount}</div>
 	<div>ships.length {ships.length}</div>
 	<div>incomingShipsAmount {incomingShipsAmount}</div>
 	<div>count {count}</div>
-	<div>savedCounter {savedCounter}</div>
-	<div class="flex w-full justify-between p-5">
-		<h1 class="font-bold text-3xl text-white uppercase">#pvb</h1>
+	<div>savedCounter {savedCounter}</div> -->
+
+	<div class="flex w-full justify-between p-5 z-50">
+		<h1 class="font-bold text-3xl text-white uppercase z-50">#pvb</h1>
 		<img src="/bd.png" alt="" />
 	</div>
 	{#if $openModal}
@@ -115,24 +115,44 @@
 			<Modal on:sendShip={animHandler} />
 		</div>
 	{:else if ship}
+		<div
+			in:fade={{ delay: 1000 }}
+			class="lg:flex absolute right-5 h-5/6 flex-col justify-center"
+		>
+			<div on:click={() => browser && location.reload()} class="hidden md:flex space-x-5 font-bold opacity-80 z-50 items-center">
+				<div class="uppercase text-xl cursor-pointer">
+					<p>Написать</p>
+					<p>поздравление</p>
+				</div>
+				<img class="w-20 2xl:w-32" src="/qr-code.png" alt="" />
+			</div>
+		</div>
 		<div class="text-white h-screen ship">
 			<div class="flex space-x-8">
-				<div class="relative">
-					<img in:fade class="w-40 h-40 object-cover" src={ship.ship || '/ships/ship1/1.png'} alt="" />
-					{#if ship.img}
+				<div>
+					<div class="relative">
 						<img
-							in:fade={{ duration: 500 }}
-							class="w-12 h-12 rounded-full object-cover absolute bottom-10 left-14"
-							src={ship.img}
+							in:fade
+							class="h-28 w-28 min-w-full md:w-40 md:h-40 object-cover"
+							src={ship.ship || '/ships/ship1/1.png'}
 							alt=""
 						/>
-					{/if}
+						<img class="absolute w-8 left-10 md:w-16 md:left-12" src="/fire.gif" alt="" />
+						{#if ship.img}
+							<img
+								in:fade={{ duration: 500 }}
+								class="h-8 w-8 bottom-8  left-10 md:w-12 md:h-12 rounded-full object-cover absolute md:bottom-10 md:left-14"
+								src={ship.img}
+								alt=""
+							/>
+						{/if}
+					</div>
 				</div>
 
-				<div class="max-w-sm">
-					<h1 class="text-xl font-medium">{ship.msg}</h1>
-					<p class="mt-5 text-lg italic">{ship.name}</p>
-					<p class="opacity-80">{ship.unit}</p>
+				<div class="w-48 md:w-full max-w-sm">
+					<h1 class="md:text-xl font-medium">{ship.msg}</h1>
+					<p class="mt-5 text-sm md:text-lg italic">{ship.name}</p>
+					<p class="opacity-80 text-sm md:text-base">{ship.unit}</p>
 				</div>
 			</div>
 		</div>
