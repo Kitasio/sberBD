@@ -6,8 +6,8 @@
 <div
 	style="background-image: url(/bg.gif)"
 	class={$openModal
-		? 'bg-repeat min-h-screen md:h-screen md:overflow-hidden font-mont'
-		: 'bg-repeat h-screen overflow-hidden font-mont'}
+		? 'bg-black bg-repeat min-h-screen md:h-screen md:overflow-hidden font-mont'
+		: 'bg-black bg-repeat h-screen overflow-hidden font-mont'}
 >
 	<slot />
 </div>

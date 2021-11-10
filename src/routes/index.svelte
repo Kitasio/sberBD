@@ -63,15 +63,15 @@
 		const randomMedium = getRndInteger(10, 40);
 		if (browser && window.innerWidth < 735) {
 			tl.set('.ship', { xPercent: 5, yPercent: 20, opacity: 0.7 });
-			tl.to('.ship', { duration, yPercent: -120, ease: 'none', opacity: 1 });
+			tl.to('.ship', { duration, yPercent: -120, ease: 'none', opacity: 1, delay: 0.5 });
 			tl.set('.ship', { opacity: 0 });
 		} else if (browser && window.innerWidth < 1024) {
 			tl.set('.ship', { xPercent: randomMedium, yPercent: 100, opacity: 0.7 });
-			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1 });
+			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1, delay: 0.5 });
 			tl.set('.ship', { opacity: 0 });
 		} else {
 			tl.set('.ship', { xPercent: randomNum, yPercent: 100, opacity: 0.7 });
-			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1 });
+			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1, delay: 0.5 });
 			tl.set('.ship', { opacity: 0 });
 		}
 	};

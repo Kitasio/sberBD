@@ -8,9 +8,12 @@
 	let loaded = false;
 	let thisImage;
 
-	const handleError = () => {}
+	const handleError = () => {
+		thisImage.style.display='none'
+	}
 
 	onMount(() => {
+		console.log(thisImage)
 		thisImage.onload = () => {
 			loaded = true;
 		};
