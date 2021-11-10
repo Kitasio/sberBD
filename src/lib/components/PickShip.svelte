@@ -1,7 +1,7 @@
 <script>
 	import { fly } from 'svelte/transition';
+	import { imgPath } from '$lib/functions/utils';
 	import { createEventDispatcher } from 'svelte';
-	import { imgPath } from '$lib/functions/firebase';
 
 	const dispatch = createEventDispatcher()
 	let ships = [

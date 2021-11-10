@@ -4,25 +4,34 @@
 	import { openModal } from '$lib/functions/utils';
 	import { fade } from 'svelte/transition';
 	import { tick } from 'svelte';
-	import { db } from '$lib/functions/firebase';
+	import { browser } from '$app/env';
+	import { collection, query, orderBy, getDocs, getFirestore, limit, startAt } from '@firebase/firestore';
+	import { getApp, getApps, initializeApp } from '@firebase/app';
+	import { firebaseConfig } from '$lib/firebaseConfig';
+
+	const firebaseApp = browser && (getApps().length === 0 ? initializeApp(firebaseConfig): getApp())
+	const db = browser && getFirestore()
+
 
 	let ships = [];
-	const sendShips = async () => {
-		let shipsRef = db.collection('ships');
-		let allShips = await shipsRef.orderBy('createdAt', 'desc').get();
-		for (const doc of allShips.docs) {
+	const getShips = async () => {
+		let shipsRef = collection(db, 'ships');
+		const q = query(shipsRef, orderBy('createdAt', 'desc'), limit(3))
+		const qSnapshot = await getDocs(q)
+		qSnapshot.forEach(doc => {
 			let data = { ...doc.data(), id: doc.id };
 			ships = [...ships, data];
-		}
-		console.log(ships);
+		})
+	};
+	const sendShips = async () => {
         await tick()
 		const tl = gsap.timeline();
 		const duration = 10;
-		tl.fromTo('.ship', { duration, yPercent: 100 }, {duration, yPercent: -100});
-	};
+		tl.fromTo('.ship', { duration, yPercent: 140 }, {duration, yPercent: -140});
+	}
 </script>
 
-<div class="overflow-hidden">
+<div class="">
 	<div class="flex w-full justify-between p-5">
 		<h1 class="font-bold text-3xl text-white uppercase">#pvb</h1>
 		<img src="/bd.png" alt="" />
