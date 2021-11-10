@@ -16,12 +16,14 @@
 	const storage = browser && getStorage()
 
 	const upload = async (file, filename) => {
-  		const storageRef = browser && ref(storage, 'public/' + filename);
+  		const storageRef = browser && ref(storage, 'resized/' + filename);
 		await uploadBytes(storageRef, file).then((snapshot) => {
 			console.log('Uploaded a blob or file!');
 		});
-		await getDownloadURL(ref(storage, 'public/' + filename)).then(url => {
-			$imgPath = url
+		await getDownloadURL(ref(storage, 'resized/' + filename)).then(url => {
+			let sufix = url.split('.').pop()
+			let filename = url.split('.').slice(0, -1).join('.') + '_100x100.' + sufix
+			$imgPath = filename
 			shipInfo.img = $imgPath
 		})
 	}
@@ -62,9 +64,10 @@
 	const handleChange = async (e) => {
 		// selected file
 		const file = e.target.files[0];
-		console.log(URL.createObjectURL(file))
-		shipInfo.img = URL.createObjectURL(file)
-		if (file) {
+		const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg']
+		console.log(file.type)
+		if (file && allowedTypes.includes(file.type)) {
+			shipInfo.img = URL.createObjectURL(file)
 			await upload(file, file.name);
 		}
 	};
@@ -76,7 +79,7 @@
 			<img on:click={close} class="cursor-pointer" src="/x.svg" alt="" />
 		</div>
 		<div>
-			<h1 class="mb-5 font-bold text-xl md:text-3xl">Сбер празднует 180 лет!</h1>
+			<h1 class="mb-5 font-bold text-xl md:text-3xl">Мы празднуем 180 лет!</h1>
 			<div class="text-xs md:text-base leading-relaxed">
 				<p>Друзья! Сегодня у нас космический юбилей.</p>
 				<p>

@@ -58,11 +58,16 @@
 	const sendShip = async () => {
 		await tick();
 		const tl = gsap.timeline({ onComplete: next });
-		const duration = 6.5;
+		const duration = 7;
 		const randomNum = getRndInteger(20, 60);
+		const randomMedium = getRndInteger(10, 40);
 		if (browser && window.innerWidth < 735) {
 			tl.set('.ship', { xPercent: 5, yPercent: 20, opacity: 0.7 });
 			tl.to('.ship', { duration, yPercent: -120, ease: 'none', opacity: 1 });
+			tl.set('.ship', { opacity: 0 });
+		} else if (browser && window.innerWidth < 1024) {
+			tl.set('.ship', { xPercent: randomMedium, yPercent: 100, opacity: 0.7 });
+			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1 });
 			tl.set('.ship', { opacity: 0 });
 		} else {
 			tl.set('.ship', { xPercent: randomNum, yPercent: 100, opacity: 0.7 });
@@ -110,8 +115,8 @@
 
 	<div class={$openModal ? 'flex flex-col' : 'h-screen flex flex-col justify-between md:h-0'}>
 		<div class="flex w-full justify-between p-5 z-50">
-			<h1 class="font-bold text-3xl md:text-5xl tracking-wide text-white uppercase z-50">#pvb</h1>
-			<img class="w-32" src="/bd.png" alt="" />
+			<h1 class="font-bold text-4xl md:text-5xl tracking-wide text-white uppercase z-50">#pvb</h1>
+			<img class="w-20 md:w-28" src="/bd.png" alt="" />
 		</div>
 		<div class={$openModal ? 'hidden' : 'md:hidden mb-5 mx-5 z-50'}>
 			<ShipCounter />
