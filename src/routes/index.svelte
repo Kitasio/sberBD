@@ -16,6 +16,7 @@
 	import { getApp, getApps, initializeApp } from '@firebase/app';
 	import ShipCounter from '$lib/components/ShipCounter.svelte';
 	import { firebaseConfig } from '$lib/firebaseConfig';
+	import Qr from '$lib/components/Qr.svelte';
 
 	const firebaseApp =
 		browser && (getApps().length === 0 ? initializeApp(firebaseConfig) : getApp());
@@ -106,30 +107,17 @@
 	<div>count {count}</div>
 	<div>savedCounter {savedCounter}</div> -->
 
-	<div class="flex w-full justify-between p-5 z-50">
-		<h1 class="font-bold text-3xl text-white uppercase z-50">#pvb</h1>
-		<img src="/bd.png" alt="" />
-	</div>
-	<div class="absolute bottom-5 right-5">
-		<ShipCounter />
+	<div class="flex flex-col">
+		<div class="flex w-full justify-between p-5 z-50">
+			<h1 class="font-bold text-3xl text-white uppercase z-50">#pvb</h1>
+			<img src="/bd.png" alt="" />
+		</div>
 	</div>
 	{#if $openModal}
 		<div out:fade class="max-w-3xl mx-auto">
 			<Modal on:sendShip={animHandler} />
 		</div>
 	{:else if ship}
-		<div
-			in:fade={{ delay: 1000 }}
-			class="lg:flex absolute left-5 h-5/6 flex-col justify-center"
-		>
-			<div on:click={() => browser && location.reload()} class="hidden md:flex flex-col font-bold opacity-80 z-50 items-start justify-start">
-				<img class="w-20 2xl:w-24" src="/qr-code.png" alt="" />
-				<div class="uppercase text-xl mt-2 cursor-pointer text-left">
-					<p>Написать</p>
-					<p>поздравление</p>
-				</div>
-			</div>
-		</div>
 		<div class="text-white h-screen ship">
 			<div class="flex space-x-8">
 				<div>
@@ -162,4 +150,8 @@
 	{:else}
 		<div class="ship" />
 	{/if}
+	<div class="md:absolute md:flex md:justify-between my-5 px-5 md:px-10 w-full bottom-5">
+		<ShipCounter />
+		<Qr />
+	</div>
 </div>

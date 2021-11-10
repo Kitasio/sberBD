@@ -5,9 +5,9 @@
 
 <div class="text-white">
 	{#key $updatedShipsCount}
-		<div class="flex md:flex-col">
-			<div class="text-2xl uppercase font-bold">ракет запущено</div>
-			<div in:fly="{{ y: 20, duration: 500}}" class="font-bold tracking-widest text-2xl md:text-5xl">{$updatedShipsCount}</div>
+		<div class="flex justify-between items-center w-full md:items-start md:flex-col md:space-y-3">
+			<div class="text-xl md:text-2xl uppercase font-medium">ракет запущено</div>
+			<div in:fly="{{ y: 20, duration: 700}}" class="font-medium tracking-widest text-5xl">{$updatedShipsCount}</div>
 		</div>
 	{/key}
 </div>
