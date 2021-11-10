@@ -8,6 +8,8 @@
 	let loaded = false;
 	let thisImage;
 
+	const handleError = () => {}
+
 	onMount(() => {
 		thisImage.onload = () => {
 			loaded = true;
@@ -15,7 +17,7 @@
 	});
 </script>
 
-<img {src} {alt} class:loaded class={classes} bind:this={thisImage} />
+<img {src} {alt} class:loaded class={classes} bind:this={thisImage} on:error={handleError} />
 
 <style>
 	img {

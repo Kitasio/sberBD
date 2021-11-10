@@ -58,7 +58,7 @@
 	const sendShip = async () => {
 		await tick();
 		const tl = gsap.timeline({ onComplete: next });
-		const duration = 5.6;
+		const duration = 6.5;
 		const randomNum = getRndInteger(20, 60);
 		if (browser && window.innerWidth < 735) {
 			tl.set('.ship', { xPercent: 5, yPercent: 20, opacity: 0.7 });
@@ -132,6 +132,8 @@
 						<img class="absolute w-8 left-10 md:w-16 md:left-16" src="/fire.gif" alt="" />
 						{#if ship.img}
 							<Image src={ship.img} alt={ship.name} classes={"h-8 w-8 bottom-8  left-10 md:w-14 md:h-14 rounded-full object-cover absolute md:bottom-12 md:left-16 md:ml-1"} />
+							{:else}
+							<span></span>
 						{/if}
 					</div>
 				</div>
