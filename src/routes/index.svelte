@@ -60,8 +60,8 @@
 		const duration = 5.6;
 		const randomNum = getRndInteger(20, 60);
 		if (browser && window.innerWidth < 735) {
-			tl.set('.ship', { xPercent: 5, yPercent: 100, opacity: 0.7 });
-			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1 });
+			tl.set('.ship', { xPercent: 5, yPercent: 20, opacity: 0.7 });
+			tl.to('.ship', { duration, yPercent: -120, ease: 'none', opacity: 1 });
 			tl.set('.ship', { opacity: 0 });
 		} else {
 			tl.set('.ship', { xPercent: randomNum, yPercent: 100, opacity: 0.7 });
@@ -107,10 +107,13 @@
 	<div>count {count}</div>
 	<div>savedCounter {savedCounter}</div> -->
 
-	<div class="flex flex-col">
+	<div class={$openModal ? "flex flex-col": "h-screen flex flex-col justify-between md:h-0"}>
 		<div class="flex w-full justify-between p-5 z-50">
 			<h1 class="font-bold text-3xl text-white uppercase z-50">#pvb</h1>
 			<img src="/bd.png" alt="" />
+		</div>
+		<div class={$openModal ? "hidden": "md:hidden mb-5 mx-5 z-50"}>
+			<ShipCounter />
 		</div>
 	</div>
 	{#if $openModal}
@@ -141,17 +144,19 @@
 				</div>
 
 				<div class="w-48 md:w-full max-w-sm">
-					<h1 class="md:text-2xl font-medium">{ship.msg}</h1>
-					<p class="mt-5 text-sm md:text-lg italic">{ship.name}</p>
-					<p class="opacity-80 text-sm md:text-base">{ship.unit}</p>
+					<h1 class="text-lg md:text-2xl font-medium">{ship.msg}</h1>
+					<p class="mt-5 md:text-lg italic">{ship.name}</p>
+					<p class="opacity-80 md:text-base">{ship.unit}</p>
 				</div>
 			</div>
 		</div>
 	{:else}
 		<div class="ship" />
 	{/if}
-	<div class="md:absolute md:flex md:justify-between my-5 px-5 md:px-10 w-full bottom-5">
+	<div class="md:absolute md:flex md:justify-between my-5 px-5 md:px-6 w-full bottom-5">
 		<ShipCounter />
 		<Qr />
 	</div>
+
+	<!-- <div class="absolute bottom-4 md:hidden"><ShipCounter /></div> -->
 </div>
