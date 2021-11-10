@@ -59,13 +59,13 @@
 			tl.fromTo(
 				'.ship',
 				{ duration, yPercent: 100 },
-				{ duration, yPercent: -100 }
+				{ duration, yPercent: -30 }
 			);
 		} else {
 			tl.fromTo(
 				'.ship',
 				{ duration, yPercent: 100, xPercent: 50 },
-				{ duration, yPercent: -100, xPercent: 50 }
+				{ duration, yPercent: -30, xPercent: 50 }
 			);
 		}
 	};
@@ -81,9 +81,9 @@
 			ship = ships[count];
 		} else if (count === incomingShipsAmount - 1) {
 			// Resuming where stopped
+			count = savedCounter + incomingShipsAmount;
 			incomingShipsAmount = null;
 			console.log('count is saved counter now!');
-			count = savedCounter;
 		}
 		count++;
 		if (count < ships.length) {
@@ -101,6 +101,11 @@
 </script>
 
 <div class="text-white">
+	<div>updatedShipsCount {updatedShipsCount}</div>
+	<div>ships.length {ships.length}</div>
+	<div>incomingShipsAmount {incomingShipsAmount}</div>
+	<div>count {count}</div>
+	<div>savedCounter {savedCounter}</div>
 	<div class="flex w-full justify-between p-5">
 		<h1 class="font-bold text-3xl text-white uppercase">#pvb</h1>
 		<img src="/bd.png" alt="" />
