@@ -1,7 +1,7 @@
 <script>
 	import { gsap } from 'gsap';
 	import Modal from '$lib/components/Modal.svelte';
-	import { openModal } from '$lib/functions/utils';
+	import { openModal, updatedShipsCount } from '$lib/functions/utils';
 	import { fade } from 'svelte/transition';
 	import { onMount, tick } from 'svelte';
 	import { browser } from '$app/env';
@@ -14,6 +14,7 @@
 		getFirestore
 	} from '@firebase/firestore';
 	import { getApp, getApps, initializeApp } from '@firebase/app';
+	import ShipCounter from '$lib/components/ShipCounter.svelte';
 	import { firebaseConfig } from '$lib/firebaseConfig';
 
 	const firebaseApp =
@@ -21,7 +22,6 @@
 	const db = browser && getFirestore();
 
 	let ships = [];
-	let updatedShipsCount = 0;
 	let count = 0;
 	let savedCounter = 0;
 	let incomingShipsAmount = 0;
@@ -35,7 +35,7 @@
 			querySnapshot.forEach((doc) => {
 				len++;
 			});
-			updatedShipsCount = len;
+			$updatedShipsCount = len;
 		});
 	});
 
@@ -56,23 +56,23 @@
 	const sendShip = async () => {
 		await tick();
 		const tl = gsap.timeline({ onComplete: next });
-		const duration = 8;
+		const duration = 5.6;
 		const randomNum = getRndInteger(20, 60);
 		if (browser && window.innerWidth < 735) {
-			tl.set('.ship', { xPercent: 5, yPercent: 95, opacity: 0.7 });
-			tl.to('.ship', { duration, yPercent: -33, ease: 'none', opacity: 1 });
+			tl.set('.ship', { xPercent: 5, yPercent: 100, opacity: 0.7 });
+			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1 });
 			tl.set('.ship', { opacity: 0 });
 		} else {
-			tl.set('.ship', { xPercent: randomNum, yPercent: 95, opacity: 0.7 });
-			tl.to('.ship', { duration, yPercent: -33, ease: 'none', opacity: 1 });
+			tl.set('.ship', { xPercent: randomNum, yPercent: 100, opacity: 0.7 });
+			tl.to('.ship', { duration, yPercent: -40, ease: 'none', opacity: 1 });
 			tl.set('.ship', { opacity: 0 });
 		}
 	};
 
 	const next = async () => {
 		// Check for incoming ships
-		if (ships.length < updatedShipsCount) {
-			incomingShipsAmount = updatedShipsCount - ships.length;
+		if (ships.length < $updatedShipsCount) {
+			incomingShipsAmount = $updatedShipsCount - ships.length;
 			savedCounter = count;
 			await getShips();
 
@@ -110,6 +110,9 @@
 		<h1 class="font-bold text-3xl text-white uppercase z-50">#pvb</h1>
 		<img src="/bd.png" alt="" />
 	</div>
+	<div class="absolute bottom-5 right-5">
+		<ShipCounter />
+	</div>
 	{#if $openModal}
 		<div out:fade class="max-w-3xl mx-auto">
 			<Modal on:sendShip={animHandler} />
@@ -117,14 +120,14 @@
 	{:else if ship}
 		<div
 			in:fade={{ delay: 1000 }}
-			class="lg:flex absolute right-5 h-5/6 flex-col justify-center"
+			class="lg:flex absolute left-5 h-5/6 flex-col justify-center"
 		>
-			<div on:click={() => browser && location.reload()} class="hidden md:flex space-x-5 font-bold opacity-80 z-50 items-center">
-				<div class="uppercase text-xl cursor-pointer">
+			<div on:click={() => browser && location.reload()} class="hidden md:flex flex-col font-bold opacity-80 z-50 items-start justify-start">
+				<img class="w-20 2xl:w-24" src="/qr-code.png" alt="" />
+				<div class="uppercase text-xl mt-2 cursor-pointer text-left">
 					<p>Написать</p>
 					<p>поздравление</p>
 				</div>
-				<img class="w-20 2xl:w-32" src="/qr-code.png" alt="" />
 			</div>
 		</div>
 		<div class="text-white h-screen ship">
@@ -133,15 +136,15 @@
 					<div class="relative">
 						<img
 							in:fade
-							class="h-28 w-28 min-w-full md:w-40 md:h-40 object-cover"
+							class="h-28 w-28 min-w-full md:w-48 md:h-48 object-cover"
 							src={ship.ship || '/ships/ship1/1.png'}
 							alt=""
 						/>
-						<img class="absolute w-8 left-10 md:w-16 md:left-12" src="/fire.gif" alt="" />
+						<img class="absolute w-8 left-10 md:w-16 md:left-16" src="/fire.gif" alt="" />
 						{#if ship.img}
 							<img
 								in:fade={{ duration: 500 }}
-								class="h-8 w-8 bottom-8  left-10 md:w-12 md:h-12 rounded-full object-cover absolute md:bottom-10 md:left-14"
+								class="h-8 w-8 bottom-8  left-10 md:w-14 md:h-14 rounded-full object-cover absolute md:bottom-12 md:left-16 md:ml-1"
 								src={ship.img}
 								alt=""
 							/>
@@ -150,7 +153,7 @@
 				</div>
 
 				<div class="w-48 md:w-full max-w-sm">
-					<h1 class="md:text-xl font-medium">{ship.msg}</h1>
+					<h1 class="md:text-2xl font-medium">{ship.msg}</h1>
 					<p class="mt-5 text-sm md:text-lg italic">{ship.name}</p>
 					<p class="opacity-80 text-sm md:text-base">{ship.unit}</p>
 				</div>
