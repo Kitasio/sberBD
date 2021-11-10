@@ -54,7 +54,7 @@
 	const sendShip = async () => {
 		await tick();
 		const tl = gsap.timeline({ onComplete: next });
-		const duration = 4;
+		const duration = 12;
 		if (browser && window.innerWidth < 735) {
 			tl.fromTo(
 				'.ship',
