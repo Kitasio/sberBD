@@ -1,9 +1,9 @@
 <script>
-	import { fly } from 'svelte/transition';
 	import { imgPath } from '$lib/functions/utils';
 	import { createEventDispatcher } from 'svelte';
+	import Image from './Image.svelte';
 
-	const dispatch = createEventDispatcher()
+	const dispatch = createEventDispatcher();
 	let ships = [
 		['/ships/ship1/1.png', '/ships/ship1/2.png', '/ships/ship1/3.png', '/ships/ship1/4.png'],
 		['/ships/ship2/1.png', '/ships/ship2/2.png', '/ships/ship2/3.png', '/ships/ship2/4.png'],
@@ -16,7 +16,7 @@
 	$: selectedShip = ships[ship][color];
 
 	$: {
-		dispatch('shipChange', selectedShip)
+		dispatch('shipChange', selectedShip);
 	}
 
 	const nextShip = () => {
@@ -44,12 +44,12 @@
 		<img class="cursor-pointer" on:click={prevShip} src="/ships/icons/arrow-left.png" alt="" />
 		{#key selectedShip}
 			<div class="relative">
-				<img in:fly class="w-40 h-40 object-cover" src={selectedShip} alt="" />
+				<Image src={selectedShip} alt={'selecting ship'} classes={'w-40 h-40 object-cover'} />
 				{#if $imgPath}
-					<img
-						class="w-12 h-12 rounded-full object-cover absolute bottom-10 left-14"
+					<Image
 						src={$imgPath}
-						alt=""
+						alt={'picking photo'}
+						classes={'w-12 h-12 rounded-full object-cover absolute bottom-10 left-14'}
 					/>
 				{/if}
 			</div>
