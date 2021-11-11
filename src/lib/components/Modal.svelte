@@ -61,7 +61,7 @@
 		}, 3000)
 	}
 	const time30 = () => {
-		let oneMin = new Date().getTime() + 1 * 60 * 1000;
+		let oneMin = new Date().getTime() + 30 * 60 * 1000;
 		return oneMin;
 	};
 	const timeNow = () => {
