@@ -99,7 +99,9 @@
 	};
 
 	const animHandler = async () => {
-		await getShips();
+		if (ships.length != $updatedShipsCount) {
+			await getShips();
+		}
 		count = 0;
 		sendShip();
 	};
@@ -132,12 +134,20 @@
 			<div class="flex space-x-8">
 				<div>
 					<div class="relative">
-						<Image src={ship.ship || '/ships/ship1/1.png'} alt={ship.name} classes={"h-28 w-28 min-w-full md:w-48 md:h-48 object-cover"} />
+						<Image
+							src={ship.ship || '/ships/ship1/1.png'}
+							alt={ship.name}
+							classes={'h-28 w-28 min-w-full md:w-48 md:h-48 object-cover'}
+						/>
 						<img class="absolute w-8 left-10 md:w-16 md:left-16" src="/fire.gif" alt="" />
 						{#if ship.img}
-							<Image src={ship.img} alt={ship.name} classes={"h-8 w-8 bottom-8  left-10 md:w-14 md:h-14 rounded-full object-cover absolute md:bottom-12 md:left-16 md:ml-1"} />
-							{:else}
-							<span></span>
+							<Image
+								src={ship.img}
+								alt={ship.name}
+								classes={'h-8 w-8 bottom-8  left-10 md:w-14 md:h-14 rounded-full object-cover absolute md:bottom-12 md:left-16 md:ml-1'}
+							/>
+						{:else}
+							<span />
 						{/if}
 					</div>
 				</div>
