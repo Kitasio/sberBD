@@ -23,6 +23,7 @@
 		browser && (getApps().length === 0 ? initializeApp(firebaseConfig) : getApp());
 	const db = browser && getFirestore();
 
+	let newShips = []
 	let ships = [];
 	let count = 0;
 	let savedCounter = 0;
@@ -34,7 +35,10 @@
 		const q = query(shipsRef, orderBy('createdAt', 'desc'));
 		const unsubscribe = onSnapshot(q, (querySnapshot) => {
 			let len = 0;
+			newShips = []
 			querySnapshot.forEach((doc) => {
+				let data = { ...doc.data(), id: doc.id };
+				newShips = [...newShips, data]
 				len++;
 			});
 			$updatedShipsCount = len;
@@ -81,7 +85,8 @@
 		if (ships.length < $updatedShipsCount) {
 			incomingShipsAmount = $updatedShipsCount - ships.length;
 			savedCounter = count;
-			await getShips();
+			ships = newShips
+			// await getShips();
 
 			count = -1;
 			ship = ships[count];
