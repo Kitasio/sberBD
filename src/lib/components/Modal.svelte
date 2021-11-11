@@ -2,14 +2,28 @@
 	import Counter from './Counter.svelte';
 	import Dropdown from './Dropdown.svelte';
 	import PickShip from './PickShip.svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { imgPath, openModal } from '$lib/functions/utils';
+	import { fade } from 'svelte/transition';
 	import { getApp, getApps, initializeApp } from '@firebase/app';
 	import { browser } from '$app/env';
 	import { firebaseConfig } from '$lib/firebaseConfig';
 	import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage';
 	import { getFirestore, collection, doc, setDoc, serverTimestamp } from '@firebase/firestore';
 	import Image from './Image.svelte';
+
+	$: triesToResend = false;
+	let alreadySent = false;
+	const checkIfAlreadySent = () => {
+		let storageVal = browser && localStorage.getItem('sent');
+		let storageValInt = parseInt(storageVal);
+
+		if (timeNow() < storageValInt) {
+			alreadySent = true;
+		} else {
+			alreadySent = false;
+		}
+	};
 
 	const firebaseApp =
 		browser && (getApps().length === 0 ? initializeApp(firebaseConfig) : getApp());
@@ -39,10 +53,31 @@
 		dispatch('sendShip');
 		$openModal = false;
 	};
+
+	const resending = () => {
+		triesToResend = true
+		setTimeout(() => {
+			triesToResend = false
+		}, 3000)
+	}
+	const time30 = () => {
+		let oneMin = new Date().getTime() + 1 * 60 * 1000;
+		return oneMin;
+	};
+	const timeNow = () => {
+		let time = new Date().getTime();
+		return time;
+	};
 	const saveAndClose = (coll, item) => {
-		saveToDB(coll, item);
-		dispatch('sendShip');
-		$openModal = false;
+		checkIfAlreadySent();
+		if (alreadySent) {
+			resending()
+		} else {
+			saveToDB(coll, item);
+			browser && localStorage.setItem('sent', time30().toString());
+			dispatch('sendShip');
+			$openModal = false;
+		}
 	};
 
 	const unitChange = (e) => {
@@ -73,12 +108,20 @@
 			await upload(file, file.name);
 		}
 	};
+
+	const handleEsc = (e) => {
+		if (e.key === 'Escape') {
+			close();
+		}
+	};
 </script>
+
+<svelte:window on:keydown={handleEsc} />
 
 <div class="p-0.5 m-5 mb-0 rounded-lg bg-gradient-to-br from-green to-yellow">
 	<div class="text-white pb-5 p-5 bg-black rounded-lg">
 		<div class="flex w-full justify-end">
-			<img on:click={close} class="cursor-pointer" src="/x.svg" alt="" />
+			<img on:click={close} class="cursor-pointer z-50" src="/x.svg" alt="" />
 		</div>
 		<div>
 			<h1 class="mb-5 font-bold text-xl md:text-3xl">Мы празднуем 180 лет!</h1>
@@ -156,15 +199,22 @@
 			</div>
 		</div>
 
-		<div class="flex justify-center md:justify-start my-10 md:my-7">
+		<div
+			class="flex flex-col md:flex-row justify-center md:space-x-2 items-center md:justify-start my-10 md:my-7"
+		>
 			<button
 				on:click={() => saveAndClose('ships', shipInfo)}
 				disabled={!postOk}
 				class={postOk
-					? 'uppercase transition-all text-sm duration-700 tracking-wider hover:text-black hover:bg-gradient-to-br hover:from-green hover:to-yellow border border-green rounded-md px-5 py-3'
-					: 'uppercase text-gray-400 border rounded-md px-5 py-3 transition-all text-sm duration-700'}
+					? 'uppercase z-50 transition-all text-sm duration-700 tracking-wider hover:text-black hover:bg-gradient-to-br hover:from-green hover:to-yellow border border-green rounded-md px-5 py-3'
+					: 'uppercase z-50 text-gray-400 border rounded-md px-5 py-3 transition-all text-sm duration-700'}
 				>Запустить ракету!</button
 			>
+			{#if triesToResend}
+				<p transition:fade class="opacity-80 text-sm text-center mt-2 md:mt-0">
+					Вы уже отправили поздравление, попробуйте позже
+				</p>
+			{/if}
 		</div>
 	</div>
 </div>
