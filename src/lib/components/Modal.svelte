@@ -3,52 +3,54 @@
 	import Dropdown from './Dropdown.svelte';
 	import PickShip from './PickShip.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { imgPath, openModal } from '$lib/functions/utils'
+	import { imgPath, openModal } from '$lib/functions/utils';
 	import { getApp, getApps, initializeApp } from '@firebase/app';
 	import { browser } from '$app/env';
 	import { firebaseConfig } from '$lib/firebaseConfig';
 	import { getStorage, ref, uploadBytes, getDownloadURL } from '@firebase/storage';
 	import { getFirestore, collection, doc, setDoc, serverTimestamp } from '@firebase/firestore';
+	import Image from './Image.svelte';
 
-	const firebaseApp = browser && (getApps().length === 0 ? initializeApp(firebaseConfig): getApp())
-	const db = browser && getFirestore()
-	const ts = browser && serverTimestamp()
-	const storage = browser && getStorage()
+	const firebaseApp =
+		browser && (getApps().length === 0 ? initializeApp(firebaseConfig) : getApp());
+	const db = browser && getFirestore();
+	const ts = browser && serverTimestamp();
+	const storage = browser && getStorage();
 
 	const upload = async (file, filename) => {
-  		const storageRef = browser && ref(storage, 'resized/' + filename);
+		const storageRef = browser && ref(storage, 'resized/' + filename);
 		await uploadBytes(storageRef, file).then((snapshot) => {
 			console.log('Uploaded a blob or file!');
 		});
-		await getDownloadURL(ref(storage, 'resized/' + filename)).then(url => {
-			let sufix = url.split('.').pop()
-			let filename = url.split('.').slice(0, -1).join('.') + '_100x100.' + sufix
-			$imgPath = filename
-			shipInfo.img = $imgPath
-		})
-	}
+		await getDownloadURL(ref(storage, 'resized/' + filename)).then((url) => {
+			let sufix = url.split('.').pop();
+			let filename = url.split('.').slice(0, -1).join('.') + '_100x100.' + sufix;
+			$imgPath = filename;
+			shipInfo.img = $imgPath;
+		});
+	};
 	export const saveToDB = async (col, item) => {
-		const newShipRef = doc(collection(db, col))
-		await setDoc(newShipRef, item)
-	}
+		const newShipRef = doc(collection(db, col));
+		await setDoc(newShipRef, item);
+	};
 
 	const dispatch = createEventDispatcher();
 	const close = () => {
-		dispatch('sendShip')
-		$openModal = false
-	}
+		dispatch('sendShip');
+		$openModal = false;
+	};
 	const saveAndClose = (coll, item) => {
-		saveToDB(coll, item)
-		dispatch('sendShip')
-		$openModal = false
-	}
+		saveToDB(coll, item);
+		dispatch('sendShip');
+		$openModal = false;
+	};
 
 	const unitChange = (e) => {
-		shipInfo.unit = e.detail
-	}
+		shipInfo.unit = e.detail;
+	};
 	const shipChange = (e) => {
-		shipInfo.ship = e.detail
-	}
+		shipInfo.ship = e.detail;
+	};
 
 	let shipInfo = {
 		name: '',
@@ -56,7 +58,7 @@
 		unit: '',
 		img: $imgPath,
 		ship: '',
-		createdAt: ts,
+		createdAt: ts
 	};
 
 	$: postOk = shipInfo.name !== '' && shipInfo.msg !== '' && shipInfo.unit !== '';
@@ -64,10 +66,10 @@
 	const handleChange = async (e) => {
 		// selected file
 		const file = e.target.files[0];
-		const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg']
-		console.log(file.type)
+		const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+		console.log(file.type);
 		if (file && allowedTypes.includes(file.type)) {
-			shipInfo.img = URL.createObjectURL(file)
+			shipInfo.img = URL.createObjectURL(file);
 			await upload(file, file.name);
 		}
 	};
@@ -98,10 +100,10 @@
 							{#if $imgPath || shipInfo.img}
 								<div class="w-16 h-16">
 									<label for="image">
-										<img
-											class="cursor-pointer inline-block h-16 w-16 rounded-full object-cover"
+										<Image
 											src={$imgPath || shipInfo.img}
-											alt=""
+											alt={'chosen pic'}
+											classes={'cursor-pointer inline-block h-16 w-16 rounded-full object-cover'}
 										/>
 									</label>
 									<input class="hidden" on:change={(e) => handleChange(e)} type="file" id="image" />
@@ -126,7 +128,7 @@
 					</div>
 				</div>
 				<div class="mt-5">
-					<Dropdown on:unitChange={e => unitChange(e)} />
+					<Dropdown on:unitChange={(e) => unitChange(e)} />
 				</div>
 
 				<div class="relative">
@@ -148,7 +150,7 @@
 
 			<div class="w-full">
 				<div class="mt-5">
-					<PickShip on:shipChange={e => shipChange(e)} />
+					<PickShip on:shipChange={(e) => shipChange(e)} />
 				</div>
 			</div>
 		</div>
@@ -160,7 +162,8 @@
 				class={postOk
 					? 'uppercase transition-all text-sm duration-700 tracking-wider hover:text-black hover:bg-gradient-to-br hover:from-green hover:to-yellow border border-green rounded-md px-5 py-3'
 					: 'uppercase text-gray-400 border rounded-md px-5 py-3 transition-all text-sm duration-700'}
-				>Запустить ракету!</button>
+				>Запустить ракету!</button
+			>
 		</div>
 	</div>
 </div>

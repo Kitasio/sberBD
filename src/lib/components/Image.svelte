@@ -13,7 +13,6 @@
 	}
 
 	onMount(() => {
-		console.log(thisImage)
 		thisImage.onload = () => {
 			loaded = true;
 		};
