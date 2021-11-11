@@ -85,8 +85,8 @@
 			<div class="text-xs md:text-base leading-relaxed">
 				<p>Друзья! Сегодня у нас космический юбилей.</p>
 				<p>
-					Поздравь команду с праздником и запусти свою ракету в <span class="font-bold italic"
-						>СберВселенную!</span
+					Поздравь команду с праздником и запусти свою ракету во <span class="font-bold italic"
+						>вселенную!</span
 					>
 				</p>
 			</div>
@@ -97,11 +97,11 @@
 				<div class="mt-10 md:mt-0">
 					<div class="flex items-center space-x-3">
 						<div>
-							{#if $imgPath || shipInfo.img}
+							{#if shipInfo.img}
 								<div class="w-16 h-16">
 									<label for="image">
 										<Image
-											src={$imgPath || shipInfo.img}
+											src={shipInfo.img}
 											alt={'chosen pic'}
 											classes={'cursor-pointer inline-block h-16 w-16 rounded-full object-cover'}
 										/>
@@ -124,6 +124,7 @@
 								: 'w-full -mt-4 bg-transparent border-0 border-b-2 focus:ring-0 focus:border-green'}
 							type="text"
 							placeholder="ФИО пилота"
+							maxlength="30"
 						/>
 					</div>
 				</div>
