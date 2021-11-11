@@ -63,7 +63,7 @@
 		const randomMedium = getRndInteger(10, 40);
 		if (browser && window.innerWidth < 735) {
 			tl.set('.ship', { xPercent: 5, yPercent: 20, opacity: 0.7 });
-			tl.to('.ship', { duration, yPercent: -120, ease: 'none', opacity: 1, delay: 0.5 });
+			tl.to('.ship', { duration, yPercent: -140, ease: 'none', opacity: 1, delay: 0.5 });
 			tl.set('.ship', { opacity: 0 });
 		} else if (browser && window.innerWidth < 1024) {
 			tl.set('.ship', { xPercent: randomMedium, yPercent: 100, opacity: 0.7 });
@@ -89,7 +89,6 @@
 			// Resuming where stopped
 			count = savedCounter + incomingShipsAmount;
 			incomingShipsAmount = null;
-			console.log('count is saved counter now!');
 		}
 		count++;
 		if (count < ships.length) {

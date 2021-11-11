@@ -208,8 +208,8 @@
 				on:click={() => saveAndClose('ships', shipInfo)}
 				disabled={!postOk}
 				class={postOk
-					? 'uppercase z-50 transition-all text-sm duration-700 tracking-wider hover:text-black hover:bg-gradient-to-br hover:from-green hover:to-yellow border border-green rounded-md px-5 py-3'
-					: 'uppercase z-50 text-gray-400 border rounded-md px-5 py-3 transition-all text-sm duration-700'}
+					? 'uppercase z-40 transition-all text-sm duration-700 tracking-wider hover:text-black hover:bg-gradient-to-br hover:from-green hover:to-yellow border border-green rounded-md px-5 py-3'
+					: 'uppercase z-40 text-gray-400 border rounded-md px-5 py-3 transition-all text-sm duration-700'}
 				>Запустить ракету!</button
 			>
 			{#if triesToResend}

@@ -24,7 +24,7 @@
 	};
 </script>
 
-<div class="relative">
+<div class="relative z-50">
 	<div
 		on:click={() => (toggled = !toggled)}
 		class={selectedUnit
