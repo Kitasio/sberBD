@@ -98,13 +98,14 @@
 
 	$: postOk = shipInfo.name !== '' && shipInfo.msg !== '' && shipInfo.unit !== '';
 
+	let tempUserPic
 	const handleChange = async (e) => {
 		// selected file
 		const file = e.target.files[0];
 		const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
-		console.log(file.type);
 		if (file && allowedTypes.includes(file.type)) {
 			shipInfo.img = URL.createObjectURL(file);
+			tempUserPic = URL.createObjectURL(file);
 			await upload(file, file.name);
 		}
 	};
@@ -140,11 +141,12 @@
 				<div class="mt-10 md:mt-0">
 					<div class="flex items-center space-x-3">
 						<div>
-							{#if shipInfo.img}
+							{#if tempUserPic}
 								<div class="w-16 h-16">
 									<label for="image">
+										<!-- <img src={tempUserPic} alt="" class="cursor-pointer inline-block h-16 w-16 rounded-full object-cover"> -->
 										<Image
-											src={shipInfo.img}
+											src={tempUserPic}
 											alt={'chosen pic'}
 											classes={'cursor-pointer inline-block h-16 w-16 rounded-full object-cover'}
 										/>
