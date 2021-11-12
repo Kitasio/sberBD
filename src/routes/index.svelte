@@ -30,22 +30,21 @@
 	let incomingShipsAmount = 0;
 	$: ship = ships[count] || '';
 
+	// onMount(async () => {
+	// 	let shipsRef = collection(db, 'ships');
+	// 	const q = query(shipsRef, orderBy('createdAt', 'desc'));
+	// 	const unsubscribe = onSnapshot(q, (querySnapshot) => {
+	// 		let len = 0;
+	// 		newShips = []
+	// 		querySnapshot.forEach((doc) => {
+	// 			let data = { ...doc.data(), id: doc.id };
+	// 			newShips = [...newShips, data]
+	// 			len++;
+	// 		});
+	// 		$updatedShipsCount = len;
+	// 	});
+	// });
 	onMount(async () => {
-		let shipsRef = collection(db, 'ships');
-		const q = query(shipsRef, orderBy('createdAt', 'desc'));
-		const unsubscribe = onSnapshot(q, (querySnapshot) => {
-			let len = 0;
-			newShips = []
-			querySnapshot.forEach((doc) => {
-				let data = { ...doc.data(), id: doc.id };
-				newShips = [...newShips, data]
-				len++;
-			});
-			$updatedShipsCount = len;
-		});
-	});
-
-	const getShips = async () => {
 		let shipsRef = collection(db, 'ships');
 		const q = query(shipsRef, orderBy('createdAt', 'desc'));
 		const qSnapshot = await getDocs(q);
@@ -54,8 +53,21 @@
 			let data = { ...doc.data(), id: doc.id };
 			ships = [...ships, data];
 		});
-		ship = ships[count];
-	};
+		ship = ships[count];	
+		sendShip()
+	})
+
+	// const getShips = async () => {
+	// 	let shipsRef = collection(db, 'ships');
+	// 	const q = query(shipsRef, orderBy('createdAt', 'desc'));
+	// 	const qSnapshot = await getDocs(q);
+	// 	ships = [];
+	// 	qSnapshot.forEach((doc) => {
+	// 		let data = { ...doc.data(), id: doc.id };
+	// 		ships = [...ships, data];
+	// 	});
+	// 	ship = ships[count];
+	// };
 	function getRndInteger(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
@@ -82,19 +94,19 @@
 
 	const next = async () => {
 		// Check for incoming ships
-		if (ships.length < $updatedShipsCount) {
-			incomingShipsAmount = $updatedShipsCount - ships.length;
-			savedCounter = count;
-			ships = newShips
-			// await getShips();
+		// if (ships.length < $updatedShipsCount) {
+		// 	incomingShipsAmount = $updatedShipsCount - ships.length;
+		// 	savedCounter = count;
+		// 	ships = newShips
+		// 	// await getShips();
 
-			count = -1;
-			ship = ships[count];
-		} else if (count === incomingShipsAmount - 1) {
-			// Resuming where stopped
-			count = savedCounter + incomingShipsAmount;
-			incomingShipsAmount = null;
-		}
+		// 	count = -1;
+		// 	ship = ships[count];
+		// } else if (count === incomingShipsAmount - 1) {
+		// 	// Resuming where stopped
+		// 	count = savedCounter + incomingShipsAmount;
+		// 	incomingShipsAmount = null;
+		// }
 		count++;
 		if (count < ships.length) {
 			sendShip();
@@ -104,9 +116,9 @@
 	};
 
 	const animHandler = async () => {
-		if (ships.length != $updatedShipsCount) {
-			await getShips();
-		}
+		// if (ships.length != $updatedShipsCount) {
+		// 	await getShips();
+		// }
 		count = 0;
 		sendShip();
 	};
